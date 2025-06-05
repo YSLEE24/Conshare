@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>챗봇</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+    }
+
+    #custom-chatbox {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 360px;
+      height: 520px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+      font-family: sans-serif;
+      padding: 20px;
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      font-size: 20px;
+      color: green;
+      cursor: pointer;
+      z-index: 10;
+    }
+
+    .chat-header-container {
+      margin-top: 40px;
+      margin-bottom: 20px;
+    }
+
+    .chat-header {
+      font-size: 16px;
+      color: green;
+      font-weight: 500;
+      line-height: 1.6;
+      text-align: left;
+    }
+
+    .chat-window {
+      flex: 1;
+      overflow-y: auto;
+      margin-bottom: 10px;
+    }
+
+    .chat-window div {
+      margin-bottom: 10px;
+    }
+
+    .user-msg {
+      text-align: right;
+      color: #000;
+    }
+
+    .bot-msg {
+      text-align: left;
+      color: green;
+    }
+
+    .chat-input {
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 14px;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    #chat-toggle-btn {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      padding: 12px 20px;
+      background-color: green;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      font-size: 14px;
+      cursor: pointer;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+  <!-- 토글 버튼 -->
+  <button id="chat-toggle-btn" onclick="openChat()">Open Chat</button>
+
+  <!-- 챗봇 박스 -->
+  <div id="custom-chatbox">
+    <div class="close-btn" onclick="closeChat()">×</div>
+    <div class="chat-header-container">
+      <div class="chat-header">🤖 무엇이든 물어보세요!</div>
+    </div>
+    <div class="chat-window" id="chat-history"></div>
+    <input type="text" id="user-input" class="chat-input" placeholder="메시지를 입력하세요...">
+  </div>
+
+  <script>
+    const chatBox = document.getElementById("custom-chatbox");
+    const toggleBtn = document.getElementById("chat-toggle-btn");
+    const chatHistory = document.getElementById("chat-history");
+    const userInput = document.getElementById("user-input");
+
+    function appendMessage(content, sender) {
+      const msgDiv = document.createElement("div");
+      msgDiv.className = sender === "user" ? "user-msg" : "bot-msg";
+      msgDiv.textContent = content;
+      chatHistory.appendChild(msgDiv);
+      chatHistory.scrollTop = chatHistory.scrollHeight;
+    }
+
+    function closeChat() {
+      chatBox.style.display = "none";
+      toggleBtn.style.display = "block";
+    }
+
+    function openChat() {
+      chatBox.style.display = "flex";
+      toggleBtn.style.display = "none";
+    }
+
+    userInput.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        const message = userInput.value.trim();
+        if (!message) return;
+
+        appendMessage(message, "user");
+        userInput.value = "";
+
+        fetch("/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: message })
+        })
+        .then(res => res.json())
+        .then(data => {
+          appendMessage(data.response, "bot");
+        })
+        .catch(() => {
+          appendMessage("⚠️ 응답에 실패했습니다.", "bot");
+        });
+      }
+    });
+
+    // 초기 상태
+    chatBox.style.display = "none";
+    toggleBtn.style.display = "block";
+  </script>
+</body>
+</html>
