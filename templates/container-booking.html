@@ -1,0 +1,314 @@
+<!doctype html>
+<html class="no-js" lang="">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Data Table | Notika - Notika Admin Template</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- favicon
+		============================================ -->
+    <link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+    <!-- Google Fonts
+		============================================ -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700,900" rel="stylesheet">
+    <!-- Bootstrap CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <!-- font awesome CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+    <!-- owl.carousel CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/owl.carousel.css">
+    <link rel="stylesheet" href="/static/css/owl.theme.css">
+    <link rel="stylesheet" href="/static/css/owl.transitions.css">
+    <!-- meanmenu CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/meanmenu/meanmenu.min.css">
+    <!-- animate CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/animate.css">
+    <!-- normalize CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/normalize.css">
+	<!-- wave CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/wave/waves.min.css">
+    <link rel="stylesheet" href="/static/css/wave/button.css">
+    <!-- mCustomScrollbar CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/scrollbar/jquery.mCustomScrollbar.min.css">
+    <!-- Notika icon CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/notika-custom-icon.css">
+    <!-- Data Table JS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/jquery.dataTables.min.css">
+    <!-- main CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/main.css">
+    <!-- style CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/style.css">
+    <!-- responsive CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/responsive.css">
+    <!-- modernizr JS
+		============================================ -->
+    <script src="/static/js/vendor/modernizr-2.8.3.min.js"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/buttons.css') }}">
+
+    <!-- Bootstrap Notify Plugin -->
+    <script src="/static/js/bootstrap-notify.js"></script>
+</head>
+
+<body>
+    <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+    
+    {% include "header.html" %}
+	<!-- Breadcomb area Start-->
+	<div class="breadcomb-area">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="breadcomb-list">
+						<div class="row">
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<div class="breadcomb-wp">
+									<div class="breadcomb-icon">
+										<img src="{{ url_for('static', filename='img/booking-page-icon-2.png') }}" width="50" height="50" alt="icon">
+									</div>
+									<div class="breadcomb-ctn">
+										<h2>Booking Page</h2>
+										<p>유휴 컨테이너를 아래에서 예약할 수 있습니다.</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Breadcomb area End-->
+    <!-- Data Table area Start-->
+    <div class="data-table-area">
+        <div class="container">
+          <!-- Data Table area Start-->
+<div class="data-table-area">
+    <div class="container">
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            <div class="alert alert-info">
+              {{ messages[0] }}
+            </div>
+          {% endif %}
+        {% endwith %}
+        
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="data-table-list">
+                        <div class="basic-tb-hd">
+                            <h2>예약 가능 컨테이너 리스트</h2>
+                            <p>우측 하단의 챗봇으로도 간단히 예약 및 조회가 가능합니다.</p>
+                        </div>
+                        <div class="table-responsive">
+                            <table id="data-table-basic" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Container Number</th>
+                                        <th>Size</th>
+                                        <th>Tare (kg)</th>
+                                        <th>Terminal</th>
+                                        <th>Region</th>
+                                        <th>Type</th>
+                                        <th>Available From</th>
+                                        <th>Available To</th>
+                                        <th>Price (KRW) per day</th>
+                                        <th>Remarks</th>
+                                        <th>예약</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in containers %}
+                                    <tr>
+                                        <td>{{ item.container_number[:4] }}****{{ item.container_number[-4:] }}</td>
+                                        <td>{{ item.size }}</td>
+                                        <td>{{ item.tare }}</td>
+                                        <td>{{ item.terminal }}</td>
+                                        <td>{{ item.region }}</td>
+                                        <td>{{ item.type }}</td>
+                                        <td>{{ item.available_from }}</td>
+                                        <td>{{ item.available_to }}</td>
+                                        <td>{{ item.price }}</td>
+                                        <td>{{ item.remarks }}</td>
+                                        <td>
+                                        <!-- 예약 버튼 -->
+                                        <!-- 최소한의 정보만 담아서 넘기기 -->
+                                        <button class="btn btn-sm btn-title-colour open-booking-modal"
+                                                data-id="{{ item.id }}"
+                                                data-container-number="{{ item.container_number }}"
+                                                data-size="{{ item.size }}">
+                                            예약
+                                        </button>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Data Table area End-->
+    <!-- Start Footer area-->
+    <div class="footer-copyright-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="footer-copy-right">
+                        <p>Copyright © 2018 
+. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Footer area-->
+    <!-- jquery
+		============================================ -->
+    <script src="/static/js/vendor/jquery-1.12.4.min.js"></script>
+    <!-- bootstrap JS
+		============================================ -->
+    <script src="/static/js/bootstrap.min.js"></script>
+    <!-- wow JS
+		============================================ -->
+    <script src="/static/js/wow.min.js"></script>
+    <!-- price-slider JS
+		============================================ -->
+    <script src="/static/js/jquery-price-slider.js"></script>
+    <!-- owl.carousel JS
+		============================================ -->
+    <script src="/static/js/owl.carousel.min.js"></script>
+    <!-- scrollUp JS
+		============================================ -->
+    <script src="/static/js/jquery.scrollUp.min.js"></script>
+    <!-- meanmenu JS
+		============================================ -->
+    <script src="/static/js/meanmenu/jquery.meanmenu.js"></script>
+    <!-- counterup JS
+		============================================ -->
+    <script src="/static/js/counterup/jquery.counterup.min.js"></script>
+    <script src="/static/js/counterup/waypoints.min.js"></script>
+    <script src="/static/js/counterup/counterup-active.js"></script>
+    <!-- mCustomScrollbar JS
+		============================================ -->
+    <script src="/static/js/scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+    <!-- sparkline JS
+		============================================ -->
+    <script src="/static/js/sparkline/jquery.sparkline.min.js"></script>
+    <script src="/static/js/sparkline/sparkline-active.js"></script>
+    <!-- flot JS
+		============================================ -->
+    <script src="/static/js/flot/jquery.flot.js"></script>
+    <script src="/static/js/flot/jquery.flot.resize.js"></script>
+    <script src="/static/js/flot/flot-active.js"></script>
+    <!-- knob JS
+		============================================ -->
+    <script src="/static/js/knob/jquery.knob.js"></script>
+    <script src="/static/js/knob/jquery.appear.js"></script>
+    <script src="/static/js/knob/knob-active.js"></script>
+    <!--  Chat JS
+		============================================ -->
+    <script src="/static/js/chat/jquery.chat.js"></script>
+    <!--  todo JS
+		============================================ -->
+    <script src="/static/js/todo/jquery.todo.js"></script>
+	<!--  wave JS
+		============================================ -->
+    <script src="/static/js/wave/waves.min.js"></script>
+    <script src="/static/js/wave/wave-active.js"></script>
+    <!-- plugins JS
+		============================================ -->
+    <script src="/static/js/plugins.js"></script>
+    <!-- Data Table JS
+		============================================ -->
+    <script defer src="/static/js/data-table/jquery.dataTables.min.js"></script>
+    <script src="/static/js/data-table/data-table-act.js"></script>
+    <!-- main JS
+		============================================ -->
+    <script src="/static/js/main.js"></script>
+	<!-- tawk chat JS
+		============================================ -->
+    <script src="/static/js/tawk-chat.js"></script>
+  <!-- booking JS -->
+    <script src="/static/js/booking.js"></script>
+
+
+  <!-- 예약 확인 모달 -->
+  <div class="modal fade" id="bookingModal" tabindex="-1" role="dialog" aria-labelledby="bookingModalLabel"
+      aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="bookingModalLabel">컨테이너 예약 확인</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="닫기">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p><strong>컨테이너 번호:</strong> <span id="modal-container-number"></span></p>
+          <p><strong>사이즈:</strong> <span id="modal-size"></span></p>
+          <p><strong>터미널:</strong> <span id="modal-terminal"></span></p>
+          <p><strong>Remarks:</strong> <span id="modal-remarks"></span></p>
+          <!-- 기타 필요한 정보 추가 가능 -->
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+          <button type="button" class="btn btn-primary confirm-booking">예약 확정</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 예약 버튼 누르면 모달 열기 + 정보 넣기
+    $('.open-booking-modal').on('click', function () {
+      const data = $(this).data('container'); // data-container에서 받아온 JSON
+      $('#modal-container-number').text(data.container_number);
+      $('#modal-size').text(data.size);
+      $('#modal-terminal').text(data.terminal);
+      $('#modal-remarks').text(data.remarks || '-');
+      
+      // 모달에 필요한 정보 저장 (submit 때 쓰기 위해)
+      window.selectedContainerData = data;
+
+      $('#bookingModal').modal('show');
+    });
+
+    // 예약 확정 시 서버로 POST 요청
+    $('.confirm-booking').on('click', function () {
+      fetch('/booked/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(window.selectedContainerData)
+      }).then(response => {
+        if (response.ok) {
+          alert("예약 완료!");
+          window.location.href = "/booked";  // 예약 내역 페이지로 이동
+        }
+      });
+    });
+  </script>
+
+
+</body>
+
+</html>

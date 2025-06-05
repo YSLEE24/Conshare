@@ -1,0 +1,13 @@
+/* static/css/buttons.css */
+.btn-title-colour {
+    background-color: #14108f ;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 13px;
+    cursor: pointer;
+}
+.btn-title-colour:hover {
+    background-color: #14108f ;
+}

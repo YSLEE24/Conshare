@@ -1,0 +1,54 @@
+# 📦 Python 가상환경
+venv/
+env/
+ENV/
+.venv/
+
+# 🐍 Python 컴파일 파일
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pdb
+
+# 📁 환경설정 파일
+.env
+.env.*
+
+# 🧪 테스트 결과
+coverage.xml
+htmlcov/
+.tox/
+.nox/
+.pytest_cache/
+
+# 🗃️ SQLite 등 DB 파일 (PostgreSQL은 안 쓰지만 혹시나)
+*.sqlite3
+*.db
+
+# 🧾 로그
+*.log
+*.log.*
+
+# ⚙️ VS Code 설정
+.vscode/
+
+# 📜 마이그레이션 파이썬 캐시
+migrations/versions/*.pyc
+
+# 💾 FAISS, 임베딩 캐시 등 (사용 중일 경우)
+faiss_store/
+embedding_model_cache/
+
+# 📁 macOS 및 기타 시스템 파일
+.DS_Store
+Thumbs.db
+
+# 📦 PyInstaller, Build, Dist
+build/
+dist/
+*.egg-info/
+*.spec
+
+# 📥 Pip freeze output
+pip-log.txt

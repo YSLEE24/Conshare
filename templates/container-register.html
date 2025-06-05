@@ -1,0 +1,530 @@
+<!doctype html>
+<html class="no-js" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>Form Components | Notika - Notika Admin Template</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- favicon
+		============================================ -->
+    <link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
+    <!-- Google Fonts
+		============================================ -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700,900" rel="stylesheet">
+    <!-- Bootstrap CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <!-- font awesome CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+    <!-- owl.carousel CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/owl.carousel.css">
+    <link rel="stylesheet" href="/static/css/owl.theme.css">
+    <link rel="stylesheet" href="/static/css/owl.transitions.css">
+    <!-- meanmenu CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/meanmenu/meanmenu.min.css">
+    <!-- animate CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/animate.css">
+    <!-- summernote CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/summernote/summernote.css">
+    <!-- Range Slider CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/themesaller-forms.css">
+    <!-- normalize CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/normalize.css">
+    <!-- mCustomScrollbar CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/scrollbar/jquery.mCustomScrollbar.min.css">
+    <!-- Notika icon CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/notika-custom-icon.css">
+    <!-- bootstrap select CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/bootstrap-select/bootstrap-select.css">
+    <!-- datapicker CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/datapicker/datepicker3.css">
+    <!-- Color Picker CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/color-picker/farbtastic.css">
+    <!-- main CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/chosen/chosen.css">
+    <!-- notification CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/notification/notification.css">
+    <!-- dropzone CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/dropzone/dropzone.css">
+    <!-- wave CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/wave/waves.min.css">
+    <!-- main CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/main.css">
+    <!-- style CSS
+		============================================ -->
+    <link rel="stylesheet" href="static/style.css">
+    <!-- responsive CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/responsive.css">
+    <!-- modernizr JS
+		============================================ -->
+    <script src="/static/js/vendor/modernizr-2.8.3.min.js"></script>
+
+    <!-- jQuery (Toast plugin보다 먼저 와야 함) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Toast Plugin CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.css" rel="stylesheet">
+
+    <!-- Toast Plugin JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
+
+
+</head>
+
+<body>
+    <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+    {% include 'header.html' %}
+	<!-- Breadcomb area Start-->
+	<div class="breadcomb-area">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="breadcomb-list">
+						<div class="row">
+							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+								<div class="breadcomb-wp">
+									<div class="breadcomb-icon">
+										<i class="notika-icon notika-form"></i>
+									</div>
+									<div class="breadcomb-ctn">
+										<h2>Upload Container</h2>
+										<p>유휴 컨테이너를 판매/등록할 수 있습니다.</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Breadcomb area End-->
+    <!-- Form Element area Start-->
+    <div class="form-element-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="form-element-list">
+                        <div class="basic-tb-hd">
+                            <h2>개별 컨테이너 등록</h2>
+                            <p>하나씩 업로드</p>
+                        </div>
+                        <div class="cmp-tb-hd bcs-hd">
+                            <h4>복수 업로드 양식</h4>
+                            <p>한번에 업로드를 원하시면 아래 버튼을 눌러 양식을 다운 받으세요. </p>
+                            <div class="summernote-clickable">
+                                <!-- 버튼처럼 보이는 a 태그 -->
+                                <a class="btn btn-primary btn-sm hec-button"
+                                href="{{ url_for('register.download_template') }}"
+                                download>
+                                양식 다운
+                                </a>
+                            </div>
+                        </div>
+                        <!-- ✅ 폼 시작 -->
+                        <form id="container-form" method="post">
+                          <div class="row">
+                              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                  <div class="form-group ic-cmp-int">
+                                      <div class="form-ic-cmp">
+                                          <i class="notika-icon notika-star"></i>
+                                      </div>
+                                      <div class="nk-int-st">
+                                          <input type="text" id="container_number" class="form-control" placeholder="컨테이너 번호  예: ABCD123456" required>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                  <div class="form-group ic-cmp-int">
+                                      <div class="form-ic-cmp">
+                                          <i class="notika-icon notika-star"></i>
+                                      </div>
+                                      <div class="nk-int-st">
+                                          <select id="container_size" class="form-control">
+                                              <option value="" disabled selected>컨테이너 사이즈</option>
+                                              <option value="20ft">20FT</option>
+                                              <option value="40ft">40FT</option>
+                                              <option value="40hq">40HQ</option>
+                                          </select>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                  <div class="form-group ic-cmp-int">
+                                      <div class="form-ic-cmp">
+                                          <i class="notika-icon notika-star"></i>
+                                      </div>
+                                      <div class="nk-int-st">
+                                          <select id="terminal" class="form-control">
+                                              <option value="" disabled selected>터미널</option>
+
+                                              <optgroup label="부산 - 외항">
+                                                  <option value="PNIT">PNIT</option>
+                                                  <option value="PNC">PNC</option>
+                                                  <option value="BNCT">BNCT</option>
+                                                  <option value="BCT">BCT</option>
+                                                  <option value="DGT">DGT</option>
+                                              </optgroup>
+                                              <optgroup label="부산 - 내항">
+                                                  <option value="HBCT">HBCT</option>
+                                                  <option value="BPTG">BPTG</option>
+                                                  <option value="BPTS">BPTS</option>
+                                                  <option value="TOC">TOC</option>
+                                              </optgroup>
+
+                                              <optgroup label="인천 - 외항">
+                                                  <option value="SNCT">SNCT</option>
+                                                  <option value="HJIT">HJIT</option>
+                                              </optgroup>
+                                              <optgroup label="인천 - 내항">
+                                                  <option value="E1CT">E1CT</option>
+                                                  <option value="ICT">ICT</option>
+                                                  <option value="IFT">IFT</option>
+                                              </optgroup>
+
+                                              <optgroup label="광양 - 내항">
+                                                  <option value="KIT">KIT</option>
+                                                  <option value="GWCT">GWCT</option>
+                                              </optgroup>
+
+                                              <optgroup label="평택 - 내항">
+                                                  <option value="PCTC">PCTC</option>
+                                                  <option value="PNCT">PNCT</option>
+                                              </optgroup>
+
+                                              <optgroup label="울산 - 내항">
+                                                  <option value="JUCT">JUCT</option>
+                                                  <option value="UNCT">UNCT</option>
+                                              </optgroup>
+
+                                              <optgroup label="군산 - 내항">
+                                                  <option value="IGCT">IGCT</option>
+                                              </optgroup>
+                                          </select>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="row">
+                              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                  <div class="form-group ic-cmp-int">
+                                      <div class="form-ic-cmp">
+                                          <i class="notika-icon notika-star"></i>
+                                      </div>
+                                      <!-- 대여/판매 구분 -->
+                                      <div class="nk-int-st mb-2">
+                                          <select id="rentalType" class="form-control">
+                                              <option value="" disabled selected>대여 or 판매 선택</option>
+                                              <option value="rental">대여(기간설정)</option>
+                                              <option value="sale">판매(반납없음)</option>
+                                          </select>
+                                      </div>
+
+                                      <!-- 대여 시작일 -->
+                                      <div class="nk-int-st mb-2">
+                                          <input type="date" id="startDate" class="form-control" min="2025-06-02">
+                                      </div>
+
+                                      <!-- 반납일 -->
+                                      <div class="nk-int-st">
+                                          <input type="date" id="endDate" class="form-control" min="2025-06-02" disabled>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                  <div class="form-group ic-cmp-int">
+                                      <div class="form-ic-cmp">
+                                          <i class="notika-icon notika-star"></i>
+                                      </div>
+                                      <div class="nk-int-st">
+                                          <input type="text" id="price" class="form-control" placeholder="0 = 협의, 또는 일 단위 대여 가격 (숫자만 입력)">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-lg-4 col-md-4 col-sm-4 col-xs-12">
+                                  <div class="form-group ic-cmp-int">
+                                      <div class="form-ic-cmp">
+                                          <i class="notika-icon notika-star"></i>
+                                      </div>
+                                      <div class="nk-int-st">
+                                          <input type="text" id="tare_weight" class="form-control" placeholder="Tare Weight">
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="row">
+                              <div class="col-lg-7 col-md-4 col-sm-4 col-xs-12">
+                                  <div class="form-group ic-cmp-int">
+                                      <div class="form-ic-cmp">
+                                          <i class="notika-icon notika-star"></i>
+                                      </div>
+                                      <div class="nk-int-st">
+                                          <input type="text" id="remarks" class="form-control" placeholder="Remarks; 기타 참고사항 (예: 즉시 예약가능, 연락요망, 데미지 여부(Dent, hole, bend, ... 등) 등)">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
+                                  <div class="form-group ic-cmp-int">
+                                      <div class="form-ic-cmp">
+                                          <i class="notika-icon notika-star"></i>
+                                      </div>
+                                      <div class="nk-int-st">
+                                          <input type="text" id="release_ref" class="form-control" placeholder="Release Reference(Pick-up Ref.)">
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12 text-right">
+                                  <button type="submit" id="register-btn" class="btn btn-success">등록하기</button>
+                              </div>
+                          </div>
+                        </form>  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Dropzone area Start-->
+    <div class="dropzone-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="dropdone-nk mg-t-30">
+                        <div class="cmp-tb-hd">
+                            <h2>한번에 업로드</h2>
+                            <p>복수 업로드 양식을 채워 아래에 Drag and Drop 하세요. (Drop시 자동으로 업로드 됩니다.)</p>
+                        </div>
+                        <div id="dropzone1" class="multi-uploader-cs">
+                            <form action="/upload" class="dropzone dropzone-nk needsclick" id="demo1-upload">
+                                <div class="dz-message needsclick download-custom">
+                                    <i class="notika-icon notika-cloud"></i>
+                                    <h2>Drop files here or click to upload.</h2>
+                                    <p><span class="note needsclick">(다운 받은 <strong>양식</strong>을 채워 업로드 해주세요.)</span>
+                                    </p>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Dropzone area End-->
+    <!-- Start Footer area-->
+    <div class="footer-copyright-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="footer-copy-right">
+                        <p>Copyright © 2018 
+. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Footer area-->
+    <!-- jquery
+		============================================ -->
+    <script src="/static/js/vendor/jquery-1.12.4.min.js"></script>
+    <!-- bootstrap JS
+		============================================ -->
+    <script src="/static/js/bootstrap.min.js"></script>
+    <!-- wow JS
+		============================================ -->
+    <script src="/static/js/wow.min.js"></script>
+    <!-- price-slider JS
+		============================================ -->
+    <script src="/static/js/jquery-price-slider.js"></script>
+    <!-- owl.carousel JS
+		============================================ -->
+    <script src="/static/js/owl.carousel.min.js"></script>
+    <!-- scrollUp JS
+		============================================ -->
+    <script src="/static/js/jquery.scrollUp.min.js"></script>
+    <!-- meanmenu JS
+		============================================ -->
+    <script src="/static/js/meanmenu/jquery.meanmenu.js"></script>
+    <!-- counterup JS
+		============================================ -->
+    <script src="/static/js/counterup/jquery.counterup.min.js"></script>
+    <script src="/static/js/counterup/waypoints.min.js"></script>
+    <script src="/static/js/counterup/counterup-active.js"></script>
+    <!-- mCustomScrollbar JS
+		============================================ -->
+    <script src="/static/js/scrollbar/jquery.mCustomScrollbar.concat.min.js"></script>
+    <!-- sparkline JS
+		============================================ -->
+    <script src="/static/js/sparkline/jquery.sparkline.min.js"></script>
+    <script src="/static/js/sparkline/sparkline-active.js"></script>
+    <!-- flot JS
+		============================================ -->
+    <script src="/static/js/flot/jquery.flot.js"></script>
+    <script src="/static/js/flot/jquery.flot.resize.js"></script>
+    <script src="/static/js/flot/flot-active.js"></script>
+    <!-- knob JS
+		============================================ -->
+    <script src="/static/js/knob/jquery.knob.js"></script>
+    <script src="/static/js/knob/jquery.appear.js"></script>
+    <script src="/static/js/knob/knob-active.js"></script>
+    <!-- Input Mask JS
+		============================================ -->
+    <script src="/static/js/jasny-bootstrap.min.js"></script>
+    <!-- icheck JS
+		============================================ -->
+    <script src="/static/js/icheck/icheck.min.js"></script>
+    <script src="/static/js/icheck/icheck-active.js"></script>
+    <!-- rangle-slider JS
+		============================================ -->
+    <script src="/static/js/rangle-slider/jquery-ui-1.10.4.custom.min.js"></script>
+    <script src="/static/js/rangle-slider/jquery-ui-touch-punch.min.js"></script>
+    <script src="/static/js/rangle-slider/rangle-active.js"></script>
+    <!-- datapicker JS
+		============================================ -->
+    <script src="/static/js/datapicker/bootstrap-datepicker.js"></script>
+    <script src="/static/js/datapicker/datepicker-active.js"></script>
+    <!-- bootstrap select JS
+		============================================ -->
+    <script src="/static/js/bootstrap-select/bootstrap-select.js"></script>
+    <!--  color-picker JS
+		============================================ -->
+    <script src="/static/js/color-picker/farbtastic.min.js"></script>
+    <script src="/static/js/color-picker/color-picker.js"></script>
+    <!--  notification JS
+		============================================ -->
+    <script src="/static/js/notification/bootstrap-growl.min.js"></script>
+    <script src="/static/js/notification/notification-active.js"></script>
+    <!--  summernote JS
+		============================================ -->
+    <script src="/static/js/summernote/summernote-updated.min.js"></script>
+    <script src="/static/js/summernote/summernote-active.js"></script>
+    <!-- dropzone JS
+		============================================ -->
+    <script src="/static/js/dropzone/dropzone.js"></script>
+    <!--  wave JS
+		============================================ -->
+    <script src="/static/js/wave/waves.min.js"></script>
+    <script src="/static/js/wave/wave-active.js"></script>
+    <!--  chosen JS
+		============================================ -->
+    <script src="/static/js/chosen/chosen.jquery.js"></script>
+    <!--  Chat JS
+		============================================ -->
+    <script src="/static/js/chat/jquery.chat.js"></script>
+    <!--  todo JS
+		============================================ -->
+    <script src="/static/js/todo/jquery.todo.js"></script>
+    <!-- plugins JS
+		============================================ -->
+    <script src="/static/js/plugins.js"></script>
+    <!-- main JS
+		============================================ -->
+    <script src="/static/js/main.js"></script>
+	  <!-- tawk chat JS
+		============================================ -->
+    <script src="/static/js/tawk-chat.js"></script>
+    <!-- container-register.js -->
+     <script src="/static/js/container-register.js"></script>
+
+    <!-- 대여 날짜 지정 -->
+    <script>
+        const rentalType = document.getElementById('rentalType');
+        const startDate = document.getElementById('startDate');
+        const endDate = document.getElementById('endDate');
+
+        rentalType.addEventListener('change', function () {
+            if (this.value === 'rental') {
+                endDate.disabled = false;
+            } else {
+                endDate.disabled = true;
+                endDate.value = '';
+            }
+        });
+
+        // 시작일을 선택하면, 반납일의 최소값도 동기화
+        startDate.addEventListener('change', function () {
+            endDate.min = this.value;
+        });
+    </script>
+
+<script>
+  $(document).ready(function () {
+    $('#register-button').on('click', function (e) {
+      e.preventDefault();
+
+      const formData = {
+        container_number: $('#container_number').val(),
+        size: $('#size').val(),
+        terminal: $('#terminal').val(),
+        remarks: $('#remarks').val()
+      };
+
+      if (!formData.container_number || !formData.size || !formData.terminal) {
+        $.toast({
+          heading: '입력 오류',
+          text: '필수 항목을 모두 입력해주세요.',
+          position: 'bottom-center',
+          icon: 'error',
+          hideAfter: 3000
+        });
+        return;
+      }
+
+      $.ajax({
+        url: '/container/register',  // 실제 등록 라우터 주소
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function () {
+          $.toast({
+            heading: '등록 완료!',
+            text: '컨테이너가 성공적으로 등록되었습니다.',
+            position: 'bottom-center',
+            icon: 'success',
+            hideAfter: 3000
+          });
+
+          // 페이지 이동 등 후속 처리
+          setTimeout(() => {
+            window.location.href = '/'; // 필요 시 다른 페이지로
+          }, 3000);
+        },
+        error: function () {
+          $.toast({
+            heading: '등록 실패',
+            text: '오류가 발생했습니다. 다시 시도해주세요.',
+            position: 'bottom-center',
+            icon: 'error',
+            hideAfter: 3000
+          });
+        }
+      });
+    });
+  });
+</script>
+
+</body>
+
+</html>
