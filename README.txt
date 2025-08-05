@@ -7,14 +7,14 @@
 
 ## 📌 기술 스택
 
-| 항목       | 사용 기술                                       |
-|------------|------------------------------------------------|
-| 백엔드     | Python, Flask, SQLAlchemy                      |
-| 데이터베이스 | PostgreSQL                                     |
-| 마이그레이션 | Flask-Migrate                                  |
-| 프론트엔드  | HTML5, CSS3, JavaScript (Jinja2 템플릿 기반)     |
-| 기타       | Pandas, Openpyxl, Bootstrap, Jquery            |
-| 실행 환경   | Windows / Mac / Linux                          |
+| 항목 | 사용 기술 |
+|------|-----------|
+| 백엔드 | Python, Flask, SQLAlchemy |
+| 데이터베이스 | PostgreSQL |
+| 마이그레이션 | Flask-Migrate |
+| 프론트엔드 | HTML5, CSS3, JavaScript (Jinja2 템플릿 기반) |
+| 기타 | Pandas, Openpyxl, Bootstrap, Jquery |
+| 실행 환경 | Windows / Mac / Linux |
 
 ---
 
@@ -29,7 +29,7 @@ CREATE USER postgres WITH PASSWORD '1234';
 GRANT ALL PRIVILEGES ON DATABASE conshare_db TO postgres;
 ```
 
-> DB 이름과 사용자, 비밀번호를 위 설정에 맞추지 않으면, `__init__.py`에서 연결 에러가 발생합니다.
+> DB 이름과 사용자, 비밀번호를 아래 설정에 맞추지 않으면, `__init__.py`에서 연결 에러가 발생합니다.
 
 ---
 
@@ -65,7 +65,12 @@ export FLASK_ENV=development
 flask db upgrade
 ```
 
-> `migrations/` 폴더가 있어야 하며, 없다면 `flask db init`, `flask db migrate`부터 실행해야 합니다.
+> `migrations/` 폴더가 없다면 아래 명령도 필요합니다:
+
+```bash
+flask db init
+flask db migrate -m "Initial migration"
+```
 
 ---
 
@@ -75,7 +80,7 @@ flask db upgrade
 python init_db.py
 ```
 
-> 내부에 `dummy_container_data_10000.csv` 또는 다른 CSV가 연결되어 있어야 합니다.
+> 내부에 `dummy_container_data_10000.csv` 파일이 연결되어 있어야 합니다.
 
 ---
 
@@ -105,18 +110,6 @@ flask run
 ├── migrations/                 # 마이그레이션 관련 파일
 └── README.md
 ```
-
----
-
-## 💡 참고사항
-
-- DB 연결 문자열은 `__init__.py` 내 다음 구조로 설정되어 있습니다:
-
-```python
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql+psycopg2://postgres:1234@localhost:5432/conshare_db'
-```
-
-- DB 설정이 다를 경우, 본인 환경에 맞게 URI를 변경해 주세요.
 
 ---
 
