@@ -1,4 +1,3 @@
-
 # 🧭 ConShare - 컨테이너 자동 중개 및 예약 플랫폼
 
 **ConShare**는 항만 및 물류 산업에서 컨테이너 공유/중개/예약을 효율적으로 관리할 수 있도록 돕는 웹 기반 ERP 시스템입니다.  
@@ -8,14 +7,14 @@
 
 ## 📌 기술 스택
 
-| 항목 | 사용 기술 |
-|------|-----------|
-| 백엔드 | Python, Flask, SQLAlchemy |
-| 데이터베이스 | PostgreSQL |
-| 마이그레이션 | Flask-Migrate |
-| 프론트엔드 | HTML5, CSS3, JavaScript (Jinja2 템플릿 기반) |
-| 기타 | Pandas, Openpyxl, Bootstrap, Jquery |
-| 실행 환경 | Windows / Mac / Linux |
+| 항목       | 사용 기술                                       |
+|------------|------------------------------------------------|
+| 백엔드     | Python, Flask, SQLAlchemy                      |
+| 데이터베이스 | PostgreSQL                                     |
+| 마이그레이션 | Flask-Migrate                                  |
+| 프론트엔드  | HTML5, CSS3, JavaScript (Jinja2 템플릿 기반)     |
+| 기타       | Pandas, Openpyxl, Bootstrap, Jquery            |
+| 실행 환경   | Windows / Mac / Linux                          |
 
 ---
 
@@ -30,7 +29,7 @@ CREATE USER postgres WITH PASSWORD '1234';
 GRANT ALL PRIVILEGES ON DATABASE conshare_db TO postgres;
 ```
 
-> DB 이름과 사용자, 비밀번호를 아래 설정에 맞추지 않으면, `__init__.py`에서 연결 에러가 발생합니다.
+> DB 이름과 사용자, 비밀번호를 위 설정에 맞추지 않으면, `__init__.py`에서 연결 에러가 발생합니다.
 
 ---
 
