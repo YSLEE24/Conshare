@@ -1,15 +1,16 @@
+<!-- contactbox.html (단일 페이지 통합형) -->
 <!doctype html>
 <html class="no-js" lang="">
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
-    <title>Normal Table | Notika - Notika Admin Template</title>
+    <title>Inbox | Notika - Notika Admin Template</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- favicon
 		============================================ -->
-    <link rel="shortcut icon" type="image/x-icon" href="/static//static/img/favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="/static/img/favicon.ico">
     <!-- Google Fonts
 		============================================ -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,700,900" rel="stylesheet">
@@ -33,16 +34,16 @@
     <!-- normalize CSS
 		============================================ -->
     <link rel="stylesheet" href="/static/css/normalize.css">
-	<!-- wave CSS
-		============================================ -->
-    <link rel="stylesheet" href="/static/css/wave/waves.min.css">
-    <link rel="stylesheet" href="/static/css/wave/button.css">
     <!-- mCustomScrollbar CSS
 		============================================ -->
     <link rel="stylesheet" href="/static/css/scrollbar/jquery.mCustomScrollbar.min.css">
     <!-- Notika icon CSS
 		============================================ -->
     <link rel="stylesheet" href="/static/css/notika-custom-icon.css">
+    <!-- wave CSS
+		============================================ -->
+    <link rel="stylesheet" href="/static/css/wave/waves.min.css">
+    <link rel="stylesheet" href="/static/css/wave/button.css">
     <!-- main CSS
 		============================================ -->
     <link rel="stylesheet" href="/static/css/main.css">
@@ -58,96 +59,69 @@
 </head>
 
 <body>
-    <!--[if lt IE 8]>
-            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
     {% include "header.html" %}
-	<!-- Breadcomb area Start-->
-	<!-- <div class="breadcomb-area">
-		<div class="container">
-			<div class="row">
-				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-					<div class="breadcomb-list">
-						<div class="row">
-							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-								<div class="breadcomb-wp">
-									<div class="breadcomb-icon">
-										<i class="notika-icon notika-form"></i>
-									</div>
-									<div class="breadcomb-ctn">
-										<h2>Normal Table</h2>
-										<p>Welcome to Notika <span class="bread-ntd">Admin Template</span></p>
-									</div>
-								</div>
-							</div>
-							<div class="col-lg-6 col-md-6 col-sm-6 col-xs-3">
-								<div class="breadcomb-report">
-									<button data-toggle="tooltip" data-placement="left" title="Download Report" class="btn"><i class="notika-icon notika-sent"></i></button>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div> -->
-	<!-- Breadcomb area End-->
-    <!-- Normal Table area Start-->
-    <div class="normal-table-area">
+<!-- Inbox area Start-->
+    <div class="inbox-area">
         <div class="container">
             <div class="row">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <div class="normal-table-list">
-                        <div class="basic-tb-hd">
-                            <h2>예약한 컨테이너</h2>
-                            <p>내가 예약한 컨테이너를 아래에서 확인하세요.</p>
+                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-12">
+                    <div class="inbox-left-sd">
+						            <div class="compose-ml">
+                            <a class="btn" href="#">Compose</a>
                         </div>
-                        <div class="bsc-tbl-st">
-                            <table class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>컨테이너 번호</th>
-                                        <th>사이즈</th>
-                                        <th>터미널</th>
-                                        <th>Tare 무게</th>
-                                        <th>사용 가능일</th>
-                                        <th>비고</th>
-                                        <th>파손 여부</th>
-                                        <th>판매자 이름</th>
-                                        <th>판매자 연락처</th>
-                                        <th>예약자</th>
-                                        <th>예약일</th>
-                                        <th>출고 레퍼런스</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for item in bookings %}
-                                    <tr>
-                                        <td>{{ loop.index }}</td>
-                                        <td>{{ item.container.container_number }}</td>
-                                        <td>{{ item.container.size }}</td>
-                                        <td>{{ item.container.terminal }}</td>
-                                        <td>{{ item.container.tare }} kg</td>
-                                        <td>{{ item.container.available_from }} ~ {{ item.container.available_to }}</td>
-                                        <td>{{ item.container.remarks or '-' }}</td>
-                                        <td>{{ '있음' if item.container.damaged else '없음' }}</td>
-                                        <td>{{ item.container.owner_name }}</td>
-                                        <td>{{ item.container.owner_contact }}</td>
-                                        <td>{{ item.user_name }}</td>
-                                        <td>{{ item.booked_date.strftime('%Y-%m-%d') }}</td>
-                                        <td>{{ item.release_reference or '-' }}</td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
+                        <div class="inbox-status">
+                            <ul class="inbox-st-nav inbox-ft">
+                                <li><a href="#inbox-pane" data-toggle="tab"><i class="notika-icon notika-mail"></i> Inbox</a></li>
+                                <li><a href="#compose-pane" data-toggle="tab"><i class="notika-icon notika-edit"></i> Compose</a></li>
+                                <li><a href="#sent-pane" data-toggle="tab"><i class="notika-icon notika-sent"></i> Sent</a></li>
+                                <li><a href="#"><i class="notika-icon notika-draft"></i> Draft</a></li>
+                                <li><a href="#"><i class="notika-icon notika-trash"></i> Trash</a></li>
+                            </ul>
+                        </div>
+                        <hr>
+                        <!-- <div class="inbox-status">
+                            <ul class="inbox-st-nav">
+                                <li><a href="#"><i class="notika-icon notika-travel"></i> Travel</a></li>
+                                <li><a href="#"><i class="notika-icon notika-finance"></i> Finance</a></li>
+                                <li><a href="#"><i class="notika-icon notika-social"></i> Social</a></li>
+                                <li><a href="#"><i class="notika-icon notika-promos"></i> Promos</a></li>
+                                <li><a href="#"><i class="notika-icon notika-flag"></i> Updates</a></li>
+                            </ul>
+                        </div>
+                        <hr> -->
+                        <!-- <div class="inbox-status">
+                            <ul class="inbox-st-nav inbox-nav-mg">
+                                <li><a href="#"><i class="notika-icon notika-success"></i> Forum</a></li>
+                                <li><a href="#"><i class="notika-icon notika-chat"></i> Chat</a></li>
+                                <li><a href="#"><i class="notika-icon notika-star"></i> Work</a></li>
+                                <li><a href="#"><i class="notika-icon notika-settings"></i> Settings</a></li>
+                                <li><a href="#"><i class="notika-icon notika-support"></i> Support</a></li>
+                            </ul>
+                        </div> -->
+                    </div>
+                </div>
+                <div>
+                    <div>
+                        <div class="tab-content">
+                            <div id="inbox-pane" class="tab-pane active">
+                                {% include 'inbox.html' %}
+                            </div>
+                            <div id="compose-pane" class="tab-pane">
+                                {% include 'compose-email.html' %}
+                            </div>
+                            <div id="view-pane" class="tab-pane">
+                                {% include 'view-email.html' %}
+                            </div>
+                            <div id="sent-pane" class="tab-pane">
+                                {% include 'sent.html' %}
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Normal Table area End-->
+    <!-- Inbox area End-->
     <!-- Start Footer area-->
     <div class="footer-copyright-area">
         <div class="container">
@@ -205,22 +179,27 @@
     <script src="/static/js/knob/jquery.knob.js"></script>
     <script src="/static/js/knob/jquery.appear.js"></script>
     <script src="/static/js/knob/knob-active.js"></script>
+    <!--  wave JS
+		============================================ -->
+    <script src="/static/js/wave/waves.min.js"></script>
+    <script src="/static/js/wave/wave-active.js"></script>
+    <!-- icheck JS
+		============================================ -->
+    <script src="/static/js/icheck/icheck.min.js"></script>
+    <script src="/static/js/icheck/icheck-active.js"></script>
     <!--  Chat JS
 		============================================ -->
     <script src="/static/js/chat/jquery.chat.js"></script>
     <!--  todo JS
 		============================================ -->
     <script src="/static/js/todo/jquery.todo.js"></script>
-	<!--  wave JS
-		============================================ -->
-    <script src="/static/js/wave/waves.min.js"></script>
-    <script src="/static/js/wave/wave-active.js"></script>
     <!-- plugins JS
 		============================================ -->
     <script src="/static/js/plugins.js"></script>
     <!-- main JS
 		============================================ -->
     <script src="/static/js/main.js"></script>
+	<!-- tawk chat JS
+		============================================ -->
+    <script src="/static/js/tawk-chat.js"></script>
 </body>
-
-</html>

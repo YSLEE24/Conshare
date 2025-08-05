@@ -97,9 +97,6 @@
 	</div>
 	<!-- Breadcomb area End-->
     <!-- Data Table area Start-->
-    <div class="data-table-area">
-        <div class="container">
-          <!-- Data Table area Start-->
 <div class="data-table-area">
     <div class="container">
         {% with messages = get_flashed_messages() %}
@@ -121,16 +118,17 @@
                             <table id="data-table-basic" class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Container Number</th>
-                                        <th>Size</th>
-                                        <th>Tare (kg)</th>
-                                        <th>Terminal</th>
-                                        <th>Region</th>
-                                        <th>Type</th>
-                                        <th>Available From</th>
-                                        <th>Available To</th>
-                                        <th>Price (KRW) per day</th>
-                                        <th>Remarks</th>
+                                        <th>컨테이너번호</th>
+                                        <th>크기</th>
+                                        <th>Tare(kg)</th>
+                                        <th>터미널</th>
+                                        <th>권역</th>
+                                        <th>구분</th>
+                                        <th>대여시작일</th>
+                                        <th>대여종료일</th>
+                                        <th>일당요금(원)</th>
+                                        <th>비고</th>
+                                        <th>등록일자</th>
                                         <th>예약</th>
                                     </tr>
                                 </thead>
@@ -145,8 +143,14 @@
                                         <td>{{ item.type }}</td>
                                         <td>{{ item.available_from }}</td>
                                         <td>{{ item.available_to }}</td>
-                                        <td>{{ item.price }}</td>
-                                        <td>{{ item.remarks }}</td>
+                                        {% if item.type == '외항' %}
+                                            <td>가격 문의</td>
+                                            <td>직접 연락 요망 (가격 협의)</td>
+                                        {% else %}
+                                            <td>{{ item.price }}</td>
+                                            <td>{{ item.remarks }}</td>
+                                        {% endif %}
+                                        <td>{{ item.created_at.strftime('%Y-%m-%d') }}</td>
                                         <td>
                                         <!-- 예약 버튼 -->
                                         <!-- 최소한의 정보만 담아서 넘기기 -->

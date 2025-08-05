@@ -57,9 +57,19 @@
     <!-- modernizr JS
 		============================================ -->
     <script src="/static/js/vendor/modernizr-2.8.3.min.js"></script>
+
+    <!-- Bootstrap Icon -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 
 <body>
+
+    <!-- {% if current_user.is_authenticated %}
+        로그인됨: {{ current_user.name }}
+    {% else %}
+        로그인 안됨
+    {% endif %} -->
+
     <!--[if lt IE 8]>
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -148,8 +158,8 @@
                 </div>
 
                 <!-- Chat Box 영역 -->
-                <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
-                    <div class="notika-chat-list notika-shadow mg-t-30 tb-res-ds-n dk-res-ds">
+                <div class="col-lg-4 col-md-8 col-sm-7 col-xs-12">
+                    <div class="notika-chat-list notika-shadow tb-res-ds-n dk-res-ds">
                         <div class="realtime-ctn">
                             <div class="realtime-title">
                                 <h2>Chat Box</h2>

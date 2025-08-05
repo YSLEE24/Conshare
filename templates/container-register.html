@@ -88,6 +88,11 @@
     <!-- Toast Plugin JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-toast-plugin/1.3.2/jquery.toast.min.js"></script>
 
+     <!-- dialog CSS
+		============================================ -->
+    <!-- <link rel="stylesheet" href="/static/css/dialog/sweetalert2.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/dialog/dialog.css') }}"> -->
+
 
 </head>
 
@@ -276,7 +281,7 @@
                               </div>
                           </div>
                           <div class="row">
-                              <div class="col-lg-7 col-md-4 col-sm-4 col-xs-12">
+                              <div class="col-lg-10 col-md-4 col-sm-4 col-xs-12">
                                   <div class="form-group ic-cmp-int">
                                       <div class="form-ic-cmp">
                                           <i class="notika-icon notika-star"></i>
@@ -286,18 +291,8 @@
                                       </div>
                                   </div>
                               </div>
-                              <div class="col-lg-3 col-md-4 col-sm-4 col-xs-12">
-                                  <div class="form-group ic-cmp-int">
-                                      <div class="form-ic-cmp">
-                                          <i class="notika-icon notika-star"></i>
-                                      </div>
-                                      <div class="nk-int-st">
-                                          <input type="text" id="release_ref" class="form-control" placeholder="Release Reference(Pick-up Ref.)">
-                                      </div>
-                                  </div>
-                              </div>
                               <div class="col-lg-2 col-md-4 col-sm-4 col-xs-12 text-right">
-                                  <button type="submit" id="register-btn" class="btn btn-success">등록하기</button>
+                                  <button type="button" id="register-btn" class="btn btn-success">등록하기</button>
                               </div>
                           </div>
                         </form>  
@@ -442,8 +437,14 @@
     <!-- main JS
 		============================================ -->
     <script src="/static/js/main.js"></script>
-    <!-- container-register.js -->
-     <script src="/static/js/container-register.js"></script>
+
+     <!--  Alert JS
+		============================================ -->
+    <!-- <script src="/static/js/dialog/sweetalert2.min.js"></script>
+    <script src="{{ url_for('static', filename='js/dialog/dialog-active.js') }}"></script> -->
+<!-- <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> -->
+
+
 
     <!-- 대여 날짜 지정 -->
     <script>
@@ -466,9 +467,10 @@
         });
     </script>
 
-<script>
+<!-- <script>
   $(document).ready(function () {
-    $('#register-button').on('click', function (e) {
+    
+    $('#register-btn').on('click', function (e) {
       e.preventDefault();
 
       const formData = {
@@ -494,32 +496,117 @@
         type: 'POST',
         contentType: 'application/json',
         data: JSON.stringify(formData),
-        success: function () {
-          $.toast({
-            heading: '등록 완료!',
-            text: '컨테이너가 성공적으로 등록되었습니다.',
-            position: 'bottom-center',
+        success: function (data) {
+          // swal("등록 완료!", data.message, "success")
+          //   .then(function() {
+          //       window.location.href = '/'; // 필요 시 다른 페이지로
+          //   });
+          Swal.fire({
             icon: 'success',
-            hideAfter: 3000
+            title: '등록 완료',
+            text: data.message || '성공적으로 등록되었습니다.',
+          }).then(() => {
+            const form = document.getElementById("container-form");
+            if (form) form.reset();
           });
-
-          // 페이지 이동 등 후속 처리
-          setTimeout(() => {
-            window.location.href = '/'; // 필요 시 다른 페이지로
-          }, 3000);
         },
         error: function () {
-          $.toast({
-            heading: '등록 실패',
-            text: '오류가 발생했습니다. 다시 시도해주세요.',
-            position: 'bottom-center',
+          // $.toast({
+          //   heading: '등록 실패',
+          //   text: '오류가 발생했습니다. 다시 시도해주세요.',
+          //   position: 'bottom-center',
+          //   icon: 'error',
+          //   hideAfter: 3000
+          // });
+          Swal.fire({
             icon: 'error',
-            hideAfter: 3000
+            title: '❌ 오류 발생',
+            text: '등록 중 문제가 발생했습니다. 다시 시도해주세요.'
           });
         }
       });
     });
   });
+</script> -->
+
+<!-- 등록 성공 모달 -->
+ <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="successModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="background-color: #14108f; color: white;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="successModalLabel">등록 완료</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="닫기">
+          <span aria-hidden="true" style="color:white;">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="successMessage"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-dismiss="modal">확인</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 입력 오류 모달 -->
+ <div class="modal fade" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="warningModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="background-color: #ffc107; color: black;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="warningModalLabel">⚠️ 입력 오류</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="닫기">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="modalMessage"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-dark" data-dismiss="modal">확인</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 서버 오류 모달 -->
+ <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content" style="background-color: #dc3545; color: white;">
+      <div class="modal-header">
+        <h5 class="modal-title" id="errorModalLabel">오류 발생</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="닫기">
+          <span aria-hidden="true" style="color:white;">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="errorMessage"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-light" data-dismiss="modal">확인</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <!-- container-register.js -->
+    <script src="/static/js/container-register.js"></script>
+
+
+<script>
+  // Dropzone 기본 설정 (id는 demo1-upload로 연결됨)
+  Dropzone.options.demo1Upload = {
+    paramName: "file", // Flask의 request.files['file']로 받음
+    maxFilesize: 5, // MB 단위
+    acceptedFiles: ".xlsx",
+    init: function () {
+      this.on("success", function (file, response) {
+        console.log("업로드 성공:", response);
+        alert("업로드가 완료되었습니다!");
+        // 성공 후 리디렉션하거나, 업로드 영역 초기화
+        window.location.href = "/booking";
+      });
+
+      this.on("error", function (file, errorMessage) {
+        console.error("업로드 실패:", errorMessage);
+        alert("파일 업로드에 실패했습니다 😢");
+      });
+    }
+  };
 </script>
 
 </body>

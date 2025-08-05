@@ -4,16 +4,19 @@ import os
 from ..common_store import registered_containers  # 임시 등록 리스트
 from Advanced_Conshare.models import Container
 from .. import db  # SQLAlchemy 인스턴스
+from ..models import Container
+import uuid
+import numpy as np
 
 # Blueprint 객체 생성: 'register' 이름으로 등록 관련 라우트를 묶음
 register_bp = Blueprint('register', __name__)
 
-# ✅ 1. 등록 폼 페이지 렌더링 (GET 요청 시 HTML 보여줌)
+# 1. 등록 폼 페이지 렌더링 (GET 요청 시 HTML 보여줌)
 @register_bp.route('/register', methods=['GET'])
 def container_register():
     return render_template('container-register.html')
 
-# ✅ 2. 단일 컨테이너 등록 처리 (AJAX POST 요청)
+# 2. 단일 컨테이너 등록 처리 (AJAX POST 요청)
 @register_bp.route('/register/submit', methods=['POST'])
 def submit():
     # 요청 데이터를 JSON 형식으로 받음
@@ -29,7 +32,7 @@ def submit():
     remarks = data.get('remarks')               # 비고
     price = data.get('price')                   # 가격
 
-    # ✅ 터미널명에 따라 지역과 항만 유형(외항/내항)을 매핑
+    # 터미널명에 따라 지역과 항만 유형(외항/내항)을 매핑
     region_type_map = {
         'PNIT': ('부산', '외항'), 'PNC': ('부산', '외항'), 'BNCT': ('부산', '외항'),
         'BCT': ('부산', '외항'), 'DGT': ('부산', '외항'), 'HBCT': ('부산', '내항'),
@@ -41,7 +44,7 @@ def submit():
     }
     region, port_type = region_type_map.get(terminal, ('기타', ''))
 
-    # ✅ SQLAlchemy 모델에 맞춰 새로운 컨테이너 인스턴스 생성
+    # SQLAlchemy 모델에 맞춰 새로운 컨테이너 인스턴스 생성
     new_container = Container(
         container_number=number,
         size=size,
@@ -55,29 +58,60 @@ def submit():
         remarks=remarks
     )
 
-    # ✅ DB에 저장
+    # DB에 저장
     db.session.add(new_container)
     db.session.commit()
 
-    # ✅ 성공 메시지를 JSON 형태로 반환
+    # 성공 메시지를 JSON 형태로 반환
     return jsonify({"message": "등록이 완료되었습니다!"})
 
-# ✅ 3. 등록된 컨테이너 리스트를 보여주는 북킹 페이지
+# 3. 등록된 컨테이너 리스트를 보여주는 북킹 페이지
 @register_bp.route('/booking', methods=['GET'])
 def booking_page():
     return render_template('container-booking.html', containers=registered_containers)
 
-# ✅ 4. 엑셀 등록 템플릿 다운로드
+# 4. 엑셀 등록 템플릿 다운로드
 @register_bp.route('/download/template', methods=['GET'])
 def download_template():
     return send_from_directory(directory='data_files', path='container_upload_template_final.xlsx', as_attachment=True)
 
-# ✅ 5. 엑셀 파일을 통한 다수 컨테이너 업로드 처리
+# 5. 엑셀 파일을 통한 다수 컨테이너 업로드 처리
 @register_bp.route('/upload', methods=['POST'])
 def upload_file():
     file = request.files['file']
     df = pd.read_excel(file)
 
+    # Flexible 키워드 기반 매핑 정의
+    COLUMN_KEYWORDS = {
+        'container_number': ['container', '번호'],
+        'size': ['size', '규격'],
+        'tare': ['tare', '무게', 'kg'],
+        'terminal': ['terminal', '터미널'],
+        'region': ['region', '지역'],  # region은 직접 추론되므로 없어도 됨
+        'type': ['type', '종류', 'port'],
+        'available_from': ['from', '시작'],
+        'available_to': ['to', '종료', '반납'],
+        'price': ['price', '요금', 'krw'],
+        'remarks': ['remarks', '비고']
+    }
+
+    # 엑셀 컬럼명을 유연하게 자동 매핑
+    def flexible_column_mapping(df):
+        new_columns = {}
+        for std_col, keywords in COLUMN_KEYWORDS.items():
+            for col in df.columns:
+                col_clean = col.strip().lower()
+                if any(keyword in col_clean for keyword in keywords):
+                    new_columns[col] = std_col
+                    break
+        return df.rename(columns=new_columns)
+
+    df = flexible_column_mapping(df)
+
+    # NaN, NaT, '', 'null', 'NaN' 등 모두 None으로 처리
+    df = df.replace([np.nan, pd.NaT, '', 'null', 'NaN', 'None'], None)
+
+    # 지역 및 항만유형 매핑
     region_type_map = {
         'PNIT': ('부산', '외항'), 'PNC': ('부산', '외항'), 'BNCT': ('부산', '외항'),
         'BCT': ('부산', '외항'), 'DGT': ('부산', '외항'), 'HBCT': ('부산', '내항'),
@@ -88,22 +122,26 @@ def upload_file():
         'JUCT': ('울산', '내항'), 'UNCT': ('울산', '내항'), 'IGCT': ('군산', '내항'),
     }
 
+    # DB에 저장
     for _, row in df.iterrows():
-        terminal = row['Terminal']
+        terminal = row.get('terminal')
         region, port_type = region_type_map.get(terminal, ('기타', ''))
 
-        item = {
-            "Container Number": row['Container Number'],
-            "Size": row['Size'],
-            "Tare (kg)": row['Tare'],
-            "Terminal": terminal,
-            "Region": region,
-            "Type": port_type,
-            "Available From": row['Available From'],
-            "Available To": row['Available To'],
-            "Price (KRW)": row['Price'],
-            "Remarks": row['Remarks'],
-        }
-        registered_containers.append(item)
+        container = Container(
+            container_number=row.get('container_number'),
+            size=row.get('size'),
+            tare=row.get('tare'),
+            terminal=terminal,
+            region=region,
+            type=row.get('type'),
+            available_from=row.get('available_from'),
+            available_to=row.get('available_to'),
+            price=row.get('price'),
+            remarks=row.get('remarks'),
+            release_reference=f"REF-{uuid.uuid4().hex[:8].upper()}",
+            status='available'
+        )
+        db.session.add(container)
 
+    db.session.commit()
     return redirect(url_for('register.booking_page'))

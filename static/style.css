@@ -4631,3 +4631,12 @@ body.box-layout {
 /*----------------------------------------*/
 .mCS-light-1.mCSB_scrollTools .mCSB_dragger .mCSB_dragger_bar{ background-color: #14108f; }
 .mCS-light-1.mCSB_scrollTools .mCSB_draggerRail{ background-color: #ccc; }
+
+
+
+/* 예약 테이블용 폰트 크기 및 줄바꿈 방지 */
+#data-table-basic th,
+#data-table-basic td {
+    font-size: 13px;  /* or 0.85em */
+    white-space: nowrap;
+}

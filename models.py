@@ -1,7 +1,9 @@
 from datetime import datetime
-from . import db
+from .extensions import db
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
 
+# 컨테이너 테이블
 class Container(db.Model):
     __tablename__ = 'containers'
 
@@ -16,16 +18,18 @@ class Container(db.Model):
     available_to = db.Column(db.Date)
     price = db.Column(db.Integer)
     remarks = db.Column(db.Text)
-    release_reference = db.Column(db.String(50))
+
+    release_reference = db.Column(db.String(50), unique=True)
+    status = db.Column(db.String(20), default='available')  # 예약 가능 상태
+    last_booked_at = db.Column(db.DateTime)
 
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
-    # 💡 컨테이너 등록자
     owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    owner = db.relationship('User', backref='owned_containers')  # backref 이름도 다르게
+    owner = db.relationship('User', backref='owned_containers')
 
-# 예약 내역용
+# 예약 내역 테이블
 class Booking(db.Model):
     __tablename__ = 'bookings'
 
@@ -36,7 +40,7 @@ class Booking(db.Model):
     user_name = db.Column(db.String(50), nullable=False)
     booked_date = db.Column(db.DateTime, default=datetime.utcnow)
 
-    # 등록 당시 컨테이너 정보 전체 저장
+    # 등록 당시 컨테이너 정보
     container_number = db.Column(db.String(20), nullable=False)
     release_reference = db.Column(db.String(100))
     size = db.Column(db.String(10))
@@ -45,28 +49,53 @@ class Booking(db.Model):
     available_from = db.Column(db.Date)
     available_to = db.Column(db.Date)
     remarks = db.Column(db.Text)
-    damaged = db.Column(db.Boolean)
+    damaged = db.Column(db.Boolean, default=False)
 
-    # 관계 설정
+    # 상태: pending, confirmed, rejected
+    status = db.Column(db.String(20), default='pending')
+
+    # 운영자 보기용 필드
+    user_email = db.Column(db.String(120))  # 예약자 이메일
+    owner_name = db.Column(db.String(50))   # 컨테이너 등록자 이름
+
     container = db.relationship('Container', backref='bookings')
 
-
-# 유저 등록
-
-class User(db.Model):
-    __tablename__ = 'user'  # 💡 ForeignKey('user.id')와 정확히 일치시켜야 함
+# 유저 테이블
+class User(db.Model, UserMixin):
+    __tablename__ = 'user'
 
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(255), nullable=False)
 
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    # 추가된 필드
+    name = db.Column(db.String(50), nullable=False)
+    address = db.Column(db.String(255))
+    role = db.Column(db.Enum('owner', 'booker', 'admin', 'both', name='user_role'), default='both')
+    is_active = db.Column(db.Boolean, default=True)
 
-# 챗봇 history 남기게 하는 용도
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+# 챗봇 히스토리 테이블
 class ChatHistory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.String(64))
     message = db.Column(db.Text)
     response = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+# 메세지 테이블 (예약용)
+class Message(db.Model):
+    __tablename__ = 'messages'
+    id = db.Column(db.Integer, primary_key=True)
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    receiver_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    subject = db.Column(db.String(255), nullable=False)
+    content = db.Column(db.Text, nullable=False)
+    is_read = db.Column(db.Boolean, default=False)
+    timestamp = db.Column(db.DateTime, default=datetime.utcnow)
+
+    sender = db.relationship('User', foreign_keys=[sender_id], backref='sent_messages')
+    receiver = db.relationship('User', foreign_keys=[receiver_id], backref='received_messages')

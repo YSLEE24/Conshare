@@ -4,54 +4,41 @@
   <meta charset="UTF-8">
   <title>챗봇</title>
   <style>
-    body {
+    html, body {
       margin: 0;
+      padding: 0;
+      height: 100%;
       font-family: sans-serif;
+      background: transparent;
     }
 
     #custom-chatbox {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 360px;
-      height: 520px;
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 8px 30px rgba(0,0,0,0.15);
-      font-family: sans-serif;
-      padding: 20px;
-      z-index: 1000;
+      width: 100%;
+      height: 100%;
       display: flex;
       flex-direction: column;
-    }
-
-    .close-btn {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      font-size: 20px;
-      color: #14108f;
-      cursor: pointer;
-      z-index: 10;
+      box-sizing: border-box;
+      padding: 20px;
+      background: white;
+      border-radius: 20px;
     }
 
     .chat-header-container {
-      margin-top: 40px;
-      margin-bottom: 20px;
+      margin-bottom: 10px;
     }
 
     .chat-header {
       font-size: 16px;
       color: #14108f;
-      font-weight: 500;
-      line-height: 1.6;
-      text-align: left;
+      font-weight: 600;
     }
 
     .chat-window {
       flex: 1;
       overflow-y: auto;
       margin-bottom: 10px;
+      display: flex;
+      flex-direction: column;
     }
 
     .chat-window div {
@@ -59,56 +46,56 @@
     }
 
     .user-msg {
+      font-size: 13px;
+      max-width: 80%;
+      background-color: #f0f0f0;
+      color: #333;
+      padding: 10px 14px;
+      border-radius: 16px 0 16px 16px;
+      margin: 10px 0 10px auto;
+      text-align: left;
+      white-space: pre-line;
+
+      display: block;
       text-align: right;
-      color: #000;
+      align-self: flex-end;
     }
 
     .bot-msg {
-      text-align: left;
+      font-size: 13px;
+      max-width: 80%;
+      background-color: #eef0fa;
       color: #14108f;
+      padding: 10px 14px;
+      border-radius: 0 16px 16px 16px;
+      margin: 10px auto 10px 0;
+      text-align: left;
+      white-space: pre-line;
+
+      display: block;
+      align-self: flex-start;
     }
 
     .chat-input {
       border: 1px solid #ddd;
       border-radius: 12px;
-      padding: 14px;
+      padding: 10px;
       font-size: 14px;
       width: 100%;
       box-sizing: border-box;
     }
-
-    #chat-toggle-btn {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      padding: 12px 20px;
-      background-color: #14108f;
-      color: white;
-      border: none;
-      border-radius: 25px;
-      font-size: 14px;
-      cursor: pointer;
-      z-index: 999;
-    }
   </style>
 </head>
 <body>
-  <!-- 토글 버튼 -->
-  <button id="chat-toggle-btn" onclick="openChat()">Open Chat</button>
-
-  <!-- 챗봇 박스 -->
   <div id="custom-chatbox">
-    <div class="close-btn" onclick="closeChat()">×</div>
     <div class="chat-header-container">
-      <div class="chat-header">🤖 무엇이든 물어보세요!</div>
+      <div class="chat-header">🤖 함께 컨테이너를 예약해봐요!</div>
     </div>
     <div class="chat-window" id="chat-history"></div>
     <input type="text" id="user-input" class="chat-input" placeholder="메시지를 입력하세요...">
   </div>
 
   <script>
-    const chatBox = document.getElementById("custom-chatbox");
-    const toggleBtn = document.getElementById("chat-toggle-btn");
     const chatHistory = document.getElementById("chat-history");
     const userInput = document.getElementById("user-input");
 
@@ -118,16 +105,7 @@
       msgDiv.textContent = content;
       chatHistory.appendChild(msgDiv);
       chatHistory.scrollTop = chatHistory.scrollHeight;
-    }
-
-    function closeChat() {
-      chatBox.style.display = "none";
-      toggleBtn.style.display = "block";
-    }
-
-    function openChat() {
-      chatBox.style.display = "flex";
-      toggleBtn.style.display = "none";
+      return msgDiv;  // ✅ 메시지 DOM 반환해서 나중에 제거 가능하게
     }
 
     userInput.addEventListener("keydown", (e) => {
@@ -138,6 +116,9 @@
         appendMessage(message, "user");
         userInput.value = "";
 
+        // ✅ 1. 로딩 메시지 표시
+        const loadingDiv = appendMessage("답변 생성 중...", "bot");
+
         fetch("/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -145,17 +126,16 @@
         })
         .then(res => res.json())
         .then(data => {
+          // ✅ 2. 기존 로딩 메시지 제거하고 실제 응답 표시
+          if (loadingDiv) chatHistory.removeChild(loadingDiv);
           appendMessage(data.response, "bot");
         })
         .catch(() => {
+          if (loadingDiv) chatHistory.removeChild(loadingDiv);
           appendMessage("⚠️ 응답에 실패했습니다.", "bot");
         });
       }
     });
-
-    // 초기 상태
-    chatBox.style.display = "none";
-    toggleBtn.style.display = "block";
   </script>
 </body>
 </html>
